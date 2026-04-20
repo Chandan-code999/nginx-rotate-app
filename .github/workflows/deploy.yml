@@ -1,0 +1,33 @@
+name: Deploy on Release Tag
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Extract Tag
+      run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          IMAGE=${{ secrets.DOCKER_USERNAME }}/nginx-rotate:$TAG
+
+          echo "Deploying $IMAGE"
+
+          docker pull $IMAGE
+
+          docker stop nginx-rotate || true
+          docker rm nginx-rotate || true
+
+          docker run -d -p 80:80 --name nginx-rotate $IMAGE
