@@ -21,7 +21,7 @@ jobs:
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          IMAGE=${{ secrets.DOCKER_USERNAME }}/nginx-rotate:$TAG
+          IMAGE=${{ secrets.DOCKER_USERNAME }}/nginx-rotate-app:$TAG
 
           echo "Deploying $IMAGE"
 
