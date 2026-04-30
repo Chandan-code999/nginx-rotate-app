@@ -42,4 +42,4 @@ jobs:
             docker run -d \
               --name nginx-rotate \
               -p 80:80 \
-          $IMAGE
+              $IMAGE
