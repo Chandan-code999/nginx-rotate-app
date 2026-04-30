@@ -20,16 +20,6 @@ jobs:
           IMAGE=$(cat image-release.txt | tr -d '[:space:]')
           echo "image=$IMAGE" >> $GITHUB_OUTPUT
 
-<<<<<<< HEAD
-    - name: Deploy to EC2
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USER }}
-        key: ${{ secrets.EC2_SSH_KEY }}
-        script: |
-          IMAGE=${{ secrets.DOCKER_USERNAME }}/nginx-rotate-app:$TAG
-=======
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -38,7 +28,6 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             IMAGE="${{ steps.image.outputs.image }}"
->>>>>>> 3c206ff (updated)
 
             echo "Deploying $IMAGE"
 
@@ -49,12 +38,8 @@ jobs:
             docker stop nginx-rotate || true
             docker rm nginx-rotate || true
 
-<<<<<<< HEAD
-          docker run -d -p 80:80 --name nginx-rotate $IMAGE
-=======
             # run new container
             docker run -d \
               --name nginx-rotate \
               -p 80:80 \
-              $IMAGE
->>>>>>> 3c206ff (updated)
+          $IMAGE
